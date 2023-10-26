@@ -5,8 +5,8 @@ import { Webhook } from 'discord-webhook-node';
 configDotenv()
 const hook = new Webhook(process.env.log);
 const log = new Webhook(process.env.message);
-hook.setUsername('Aetherium API');
-log.setUsername("Aetherium Server Logs");
+// hook.setUsername('Aetherium API');
+// log.setUsername("Aetherium Server Logs");
 var db = new JsonDB(new Config("aetherium", true, false, '/'));
 const app = express();
 app.use(express.urlencoded({extended: true}));
@@ -29,13 +29,19 @@ app.get("/exists/:id", async (req, res) => {
 
 app.get("/join/:id", async (req, res) => {
     const id = req.params.id;
-    await db.push("/users/" + id)
+    await db.push("/users/" + id);
+    res.json({
+        status: 200
+    });
 });
 
 
 app.get("/leave/:id", async (req, res) => {
     const id = req.params.id;
     await db.delete("/users/" + id)
+    res.json({
+        status: 200
+    });
 });
 
 app.post("/join", async (req, res) => {
@@ -62,7 +68,7 @@ app.post("/join", async (req, res) => {
         time: new Date().getTime()
     }], false);
 
-    hook.send(`**[i]** New connection: **${username}** / **${uuid}**`);
+    // hook.send(`**[i]** New connection: **${username}** / **${uuid}**`);
 
     res.json({
         success: true
@@ -72,6 +78,6 @@ app.post("/join", async (req, res) => {
 const PORT = 8080;
 
 app.listen(PORT, () => {
-    log.send(`**[INFO]** Server is running.`)
+    // log.send(`**[INFO]** Server is running.`)
     console.log(`Server is running on PORT: ${PORT}`);
 });
