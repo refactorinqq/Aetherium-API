@@ -20,6 +20,24 @@ app.get("/", (req, res) => {
    })
 });
 
+app.get("/exists/:id", async (req, res) => {
+    const id = req.params.id;
+    res.json({
+        exists: await db.exists("/users/" + id)
+    })
+});
+
+app.get("/join/:id", async (req, res) => {
+    const id = req.params.id;
+    await db.push("/users/" + id)
+});
+
+
+app.get("/leave/:id", async (req, res) => {
+    const id = req.params.id;
+    await db.delete("/users/" + id)
+});
+
 app.post("/join", async (req, res) => {
     const username = req.body.username;
     const uuid = req.body.uuid;
